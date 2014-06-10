@@ -89,12 +89,13 @@ end
 
 
 class War
-  attr_reader :player1, :player2
+  attr_reader :player1, :player2, :turn_count
 
   def initialize(player1, player2)
     @deck = Deck.new
     @player1 = Player.new(player1)
     @player2 = Player.new(player2)
+    @turn_count = 0
 
     @deck.create_52_card_deck
     @deck.shuffle
@@ -112,16 +113,13 @@ class War
         deck_p1 = @player1.hand
         deck_p2 = @player2.hand
 
-        # deck_p1.check_deck
-        # deck_p2.check_deck
-
         draw_p1 = deck_p1.deal_card
         draw_p2 = deck_p2.deal_card
-        @turn_count = 0
+
 
         puts "#{@player1.name} played a #{draw_p1.rank}"
         puts "#{@player2.name} played a #{draw_p2.rank}"
-        # binding.pry
+
         result = WarAPI.play_turn(@player1, draw_p1, @player2, draw_p2)
         result[player1].each { |v| deck_p1.add_card(v) ; puts "player 1 won a #{v.rank} for his hand" }
         result[player2].each { |v| deck_p2.add_card(v) ; puts "player 1 won a #{v.rank} to his hand" }
@@ -129,36 +127,14 @@ class War
         deck_p1.check_deck
         deck_p2.check_deck
 
-        # binding.pry
+
         @turn_count += 1
       end
       get_winner
   end
 
-  # def draw
-  #   deck_p1 = @player1.hand
-  #   deck_p2 = @player2.hand
-
-  #   draw_battle = []
-  #   # draw_battle << 3.times { @player1.hand.deal_card }
-  #   # draw_battle << 3.times { @player2.hand.deal_card }
-
-  #   draw_p1 = deck_p1.deal_card
-  #   draw_p2 = deck_p2.deal_card
-
-  #   result = WarAPI.play_turn(@player1, draw_p1, @player2, draw_p2)
-  #   result[player1].each { |v| deck_p1.add_card(v) ; puts "player 1 won a #{v} for his hand" }
-  #   result[player2].each { |v| deck_p2.add_card(v) ; puts "player 1 won a #{v} to his hand" }
-
-  #   if result[player1] = []
-  #     draw_battle.each { |v| deck_p1.add_card(v) ; puts "player 1 won a #{v} for his hand" }
-  #   else
-  #     draw_battle.each { |v| deck_p2.add_card(v) ; puts "player 1 won a #{v} to his hand" }
-  #   end
-  # end
-
   def get_winner
-    if @player1.hand.deck.length == []
+    if @player1.hand.deck == []
       puts "#{@player2.name} has one the game in #{@turn_count} turns"
       @player2
     else
@@ -183,28 +159,9 @@ class WarAPI
     end
   end
 
-  # def draw(player1, player2)
-  #   deck_p1 = player1.hand
-  #   deck_p2 = player2.hand
-
-  #   draw_battle = []
-  #   # draw_battle << 3.times { player1.hand.deal_card }
-  #   # draw_battle << 3.times { player2.hand.deal_card }
-
-  #   draw_p1 = deck_p1.deal_card
-  #   draw_p2 = deck_p2.deal_card
-
-  #   result = WarAPI.play_turn(player1, draw_p1, player2, draw_p2)
-  #   result[player1].each { |v| deck_p1.add_card(v) ; puts "player 1 won a #{v} for his hand" }
-  #   result[player2].each { |v| deck_p2.add_card(v) ; puts "player 1 won a #{v} to his hand" }
-
-  #   if result[player1] = []
-  #     draw_battle.each { |v| deck_p1.add_card(v) ; puts "player 1 won a #{v} for his hand" }
-  #   else
-  #     draw_battle.each { |v| deck_p2.add_card(v) ; puts "player 1 won a #{v} to his hand" }
-  #   end
-  # end
+  def draw(player1, card1, p1_to_win, player2, card2, p2_to_win)
+  end
 
 end
 
-# binding.pry
+
